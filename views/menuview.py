@@ -33,7 +33,7 @@ def main_menu():
 
 
 def tournament_menu(round_in_progress=False):
-    print("Menu Tournoi:\n")
+    print("\nMenu Tournoi:\n")
     if not round_in_progress:
         print("1 : Générer une ronde.")
     else:
