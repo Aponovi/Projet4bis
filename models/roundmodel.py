@@ -3,6 +3,7 @@ import datetime
 
 class Round:
     """Modèle représentant un tour."""
+
     def __init__(self, name, start_date, end_date, matches):
         self.name = name
         self.start_date = start_date
@@ -75,7 +76,7 @@ class Round:
         previous_matches = []
         for m in range(nb_matches):
             # recherche dans round_instance les matches précédents pour savoir si les joueurs se sont déjà rencontrés
-            while self.historic_match(index_player_1, index_player_2_tmp):
+            while self.historic_match(round_instance, index_player_1, index_player_2_tmp, players):
                 index_player_2_tmp += 1
                 if index_player_2_tmp > nb_players - 1:
                     index_player_2_tmp = index_player_2
@@ -90,10 +91,12 @@ class Round:
             for ind in range(len(players)):
                 if ind not in previous_matches:
                     index_player_1 = ind
+                    break
             for ind in range(index_player_1 + 1, len(players)):
                 if ind not in previous_matches:
                     index_player_2 = ind
                     index_player_2_tmp = ind
+                    break
 
     def generate_pair(self, players, round_instance):
         nb_players = len(players)
@@ -106,10 +109,12 @@ class Round:
             self.matches = round_row
             round_instance.append(round_row)
 
-    # TODO
-    def historic_match(self, index_player_1, index_player_2):
+    def historic_match(self, round_instance, index_player_1, index_player_2, players):
+        for i in range(len(round_instance)):
+            tour = round_instance[i]
+            for k in range(len(tour)):
+                match = tour[k]
+                if (match[0][0] == players[index_player_1] and match[1][0] == players[index_player_2]) \
+                        or (match[0][0] == players[index_player_2] and match[1][0] == players[index_player_1]):
+                    return True
         return False
-
-    # TODO
-    def finished_match(self):
-        pass

@@ -2,7 +2,6 @@ from views import menuview
 from controllers import tournamentcontroller, roundcontroller
 
 
-
 def start_program():
     menuview.welcome()
     choice = menuview.main_menu()

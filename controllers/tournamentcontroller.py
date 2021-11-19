@@ -3,6 +3,7 @@ from views import tournamentview as tournament_view, menuview as view_menu
 from models.tournamentmodel import TournamentModel as Tournament_model
 from models.playermodel import Player as Player_model
 
+
 class TournamentController:
 
     def __init__(self):
@@ -36,7 +37,8 @@ class TournamentController:
                                           end_date="22/10/2021",
                                           round_instances=[],
                                           time="Bullet",
-                                          description="description")
+                                          description="description",
+                                          turn_number=4)
 
         for i in range(8):
             player = Player_model(name="name" + str(i),
