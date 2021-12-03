@@ -1,4 +1,4 @@
-from views import menuview
+from views import menuview, tournamentview
 from controllers import tournamentcontroller, roundcontroller
 
 
@@ -32,3 +32,8 @@ def menu_tournament(tournament, round_in_progress=False):
             round_controller.round_results(tournament)
     elif choice == 2:
         """Mettre à jour classement"""
+
+
+def fin_tournament(tournament):
+    players = tournament.tournament_results()
+    tournamentview.fin_tournoi_affichage(players)

@@ -1,14 +1,10 @@
 import datetime
 
+from models import matchmodel
+
 
 class Round:
     """Modèle représentant un tour."""
-
-    def __init__(self, name, start_date, end_date, matches):
-        self.name = name
-        self.start_date = start_date
-        self.end_date = end_date
-        self.matches = matches
 
     def __init__(self, tournament):
         nb_round_past = len(tournament.round_instances)
@@ -27,13 +23,14 @@ class Round:
         players_inf = players[middle_list:nb_players]
         nb_matches = len(players_sup)
         for index in range(nb_matches):
-            competitors = ([players_sup[index], 0], [players_inf[index], 0])
-            round_row.append(competitors)
+            # competitors = ([players_sup[index], 0], [players_inf[index], 0])
+            competitors = matchmodel.Match(players_sup[index], 0, players_inf[index], 0)
+            round_row.append(competitors.match_tuple())
 
-    def sorting_players(self, round_instance):
+    def sorting_players(self, round_instances):
         """Cumule les scores des joueurs"""
         players_scores = {}
-        for tour in round_instance:
+        for tour in round_instances:
             for match in tour:
                 first_element = match[0]
                 second_element = match[1]
@@ -65,10 +62,11 @@ class Round:
                             joueur_max_score = joueur
             players.append(joueur_max_score)
             del players_scores[joueur_max_score]
+        return players
 
     def pair_player(self, players, round_instance, round_row):
         nb_players = len(players)
-        self.sorting_players(round_instance)
+        players = self.sorting_players(round_instance)
         nb_matches = int(nb_players / 2)
         index_player_1 = 0
         index_player_2 = 1
@@ -76,14 +74,14 @@ class Round:
         previous_matches = []
         for m in range(nb_matches):
             # recherche dans round_instance les matches précédents pour savoir si les joueurs se sont déjà rencontrés
-            while self.historic_match(round_instance, index_player_1, index_player_2_tmp, players):
+            while matchmodel.Match.historic_match(round_instance, index_player_1, index_player_2_tmp, players):
                 index_player_2_tmp += 1
                 if index_player_2_tmp > nb_players - 1:
                     index_player_2_tmp = index_player_2
                     break
             index_player_2 = index_player_2_tmp
-            competitors = ([players[index_player_1], 0], [players[index_player_2], 0])
-            round_row.append(competitors)
+            competitors = matchmodel.Match(players[index_player_1], 0, players[index_player_2], 0)
+            round_row.append(competitors.match_tuple())
             previous_matches.append(index_player_1)
             previous_matches.append(index_player_2)
 
@@ -109,12 +107,4 @@ class Round:
             self.matches = round_row
             round_instance.append(round_row)
 
-    def historic_match(self, round_instance, index_player_1, index_player_2, players):
-        for i in range(len(round_instance)):
-            tour = round_instance[i]
-            for k in range(len(tour)):
-                match = tour[k]
-                if (match[0][0] == players[index_player_1] and match[1][0] == players[index_player_2]) \
-                        or (match[0][0] == players[index_player_2] and match[1][0] == players[index_player_1]):
-                    return True
-        return False
+

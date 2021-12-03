@@ -3,7 +3,6 @@ from views import roundview
 from controllers import menucontroller
 
 
-
 class RoundController:
 
     def __init__(self):
@@ -20,15 +19,18 @@ class RoundController:
     def round_results(self, tournament):
         tour = tournament.round_instances[len(tournament.round_instances)-1]
         for i in range(len(tour)):
-           choix = self.view.matches_done(tour, i)
-           match = tour[i]
-           joueur_1 = match[0]
-           joueur_2 = match[1]
-           if choix == 1:
-               joueur_1[1] += 1
-           elif choix == 2:
-               joueur_2[1] += 1
-           elif choix == 3:
-               joueur_1[1] += 0.5
-               joueur_2[1] += 0.5
-        menucontroller.menu_tournament(tournament)
+            choix = self.view.matches_done(tour, i)
+            match = tour[i]
+            joueur_1 = match[0]
+            joueur_2 = match[1]
+            if choix == 1:
+                joueur_1[1] += 1
+            elif choix == 2:
+                joueur_2[1] += 1
+            elif choix == 3:
+                joueur_1[1] += 0.5
+                joueur_2[1] += 0.5
+        if tournament.turn_number > len(tournament.round_instances):
+            menucontroller.menu_tournament(tournament)
+        else:
+            menucontroller.fin_tournament(tournament)

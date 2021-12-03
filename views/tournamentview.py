@@ -1,4 +1,4 @@
-from controllers import tournamentcontroller
+from controllers import menucontroller
 from views import verification
 
 
@@ -66,3 +66,16 @@ def tournament_players(in_tournament):
     gender = verification.check_gender("Veuillez entrer le genre du joueur (f/m): ")
     ranking = verification.field_int("Veuillez entrer le classement du joueur: ")
     return in_tournament, name, first_name, birth_date, gender, ranking
+
+
+def fin_tournoi_affichage(players=[]):
+    print("\nLes résultats du tournoi sont: \n")
+    for player in players:
+        score = player[1]
+        name = player[0].name
+        first_name = player[0].first_name
+        print(f"{name} {first_name} : {score} points")
+    menucontroller.start_program()
+
+
+
