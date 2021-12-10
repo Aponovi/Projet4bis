@@ -1,5 +1,5 @@
 import datetime
-
+import uuid
 from models import matchmodel
 
 
@@ -12,6 +12,18 @@ class Round:
         self.start_date = datetime.datetime.now()
         self.end_date = None
         self.matches = None
+        self.id_tournament = tournament.id_tournament
+        self.id_round = uuid.uuid4()
+
+    def serialized_round(self):
+        return {
+            'name': self.name,
+            'start_date': self.start_date,
+            'end_date': self.end_date,
+            'matches': self.matches,
+            'id_tournament': self.id_tournament.hex,
+            'id_round': self.id_round.hex
+            }
 
     def generate_first_pair(self, players, round_row):
         """Premières paires générées selon le système de tournoi suisse"""
@@ -24,7 +36,7 @@ class Round:
         nb_matches = len(players_sup)
         for index in range(nb_matches):
             # competitors = ([players_sup[index], 0], [players_inf[index], 0])
-            competitors = matchmodel.Match(players_sup[index], 0, players_inf[index], 0)
+            competitors = matchmodel.Match(players_sup[index], 0, players_inf[index], 0, self.id_round)
             round_row.append(competitors.match_tuple())
 
     def sorting_players(self, round_instances):
@@ -80,7 +92,7 @@ class Round:
                     index_player_2_tmp = index_player_2
                     break
             index_player_2 = index_player_2_tmp
-            competitors = matchmodel.Match(players[index_player_1], 0, players[index_player_2], 0)
+            competitors = matchmodel.Match(players[index_player_1], 0, players[index_player_2], 0, self.id_round)
             round_row.append(competitors.match_tuple())
             previous_matches.append(index_player_1)
             previous_matches.append(index_player_2)

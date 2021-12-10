@@ -1,3 +1,6 @@
+import uuid
+
+
 class TournamentModel:
     """Modèle représentant un tournoi."""
 
@@ -12,6 +15,7 @@ class TournamentModel:
         self.description = description
         self.turn_number = turn_number
         self.players = []
+        self.id_tournament = uuid.uuid4()
 
     def serialized_tournament(self):
         return {
@@ -23,7 +27,7 @@ class TournamentModel:
             'time': self.time,
             'description': self.description,
             'turn_number': self.turn_number,
-            'players': self.players,
+            'id_tournament': self.id_tournament.hex
             }
 
     def add_player(self, player):

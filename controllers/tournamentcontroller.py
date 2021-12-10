@@ -33,7 +33,8 @@ class TournamentController:
                                   first_name=new_player[2],
                                   birth_date=new_player[3],
                                   gender=new_player[4],
-                                  ranking=new_player[5])
+                                  ranking=new_player[5],
+                                  id_tournament=new_tournament.id_tournament)
             new_tournament.add_player(player)
             serialized_player = player.serialized_player()
             serialized_players.append(serialized_player)
@@ -45,6 +46,7 @@ class TournamentController:
 
     @staticmethod
     def tournament_creation_test():
+        serialized_tournaments = []
         new_tournament = Tournament_model(name="name",
                                           place="place",
                                           start_date="22/10/2021",
@@ -53,13 +55,20 @@ class TournamentController:
                                           time="Bullet",
                                           description="description",
                                           turn_number=4)
+        serialized_tournament = new_tournament.serialized_tournament()
+        serialized_tournaments.append(serialized_tournament)
+        db = TinyDB('db.json')
+        tournaments_table = db.table('tournaments')
+        tournaments_table.insert_multiple(serialized_tournaments)
+
         serialized_players = []
         for i in range(8):
             player = Player_model(name="name" + str(i),
                                   first_name="first_name" + str(i),
                                   birth_date="22/10/2021",
                                   gender="f",
-                                  ranking=i * 2 + 404)
+                                  ranking=i * 2 + 404,
+                                  id_tournament=new_tournament.id_tournament)
             new_tournament.add_player(player)
             serialized_player = player.serialized_player()
             serialized_players.append(serialized_player)
