@@ -18,9 +18,8 @@ class Round:
     def serialized_round(self):
         return {
             'name': self.name,
-            'start_date': self.start_date,
-            'end_date': self.end_date,
-            'matches': self.matches,
+            'start_date': str(self.start_date),
+            'end_date': str(self.end_date),
             'id_tournament': self.id_tournament.hex,
             'id_round': self.id_round.hex
             }
@@ -39,7 +38,8 @@ class Round:
             competitors = matchmodel.Match(players_sup[index], 0, players_inf[index], 0, self.id_round)
             round_row.append(competitors.match_tuple())
 
-    def sorting_players(self, round_instances):
+    @staticmethod
+    def sorting_players(round_instances):
         """Cumule les scores des joueurs"""
         players_scores = {}
         for tour in round_instances:
@@ -118,5 +118,3 @@ class Round:
                 self.pair_player(players, round_instance, round_row)
             self.matches = round_row
             round_instance.append(round_row)
-
-

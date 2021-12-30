@@ -1,5 +1,5 @@
 from views import menuview, tournamentview
-from controllers import tournamentcontroller, roundcontroller
+from controllers import tournamentcontroller, roundcontroller, playercontroller
 
 
 def start_program():
@@ -13,8 +13,7 @@ def start_program():
     elif choice == 4:
         controller_tournament = tournamentcontroller.TournamentController()
         controller_tournament.tournament_creation_test()
-    # elif choice == 2:
-    #     controllers.update_ranking()
+
     # elif choice == 3:
     # controllers.display_reports()
 
@@ -23,15 +22,17 @@ def menu_tournament(tournament, round_in_progress=False):
     choice = menuview.tournament_menu(round_in_progress)
     if choice == 1:
         if not round_in_progress:
-            """générer une ronde"""
+            """Générer une ronde"""
             round_controller = roundcontroller.RoundController()
             round_controller.round_creation(tournament)
         else:
-            """saisir les scores de la ronde"""
+            """Saisir les scores de la ronde"""
             round_controller = roundcontroller.RoundController()
             round_controller.round_results(tournament)
     elif choice == 2:
         """Mettre à jour classement"""
+        player_controller = playercontroller.PlayerController()
+        player_controller.update_ranking(tournament, round_in_progress)
 
 
 def fin_tournament(tournament):

@@ -18,9 +18,12 @@ class Player:
         return {
             'name': self.name,
             'first_name': self.first_name,
-            'birth_date': self.birth_date,
+            'birth_date': str(self.birth_date),
             'gender': self.gender,
             'ranking': self.ranking,
             'id_player': self.id_player.hex,
             'id_tournament': self.id_tournament.hex
             }
+
+    def update_ranking(self, new_ranking):
+        self.ranking = new_ranking

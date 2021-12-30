@@ -4,15 +4,18 @@ import uuid
 class TournamentModel:
     """Modèle représentant un tournoi."""
 
-    def __init__(self, name, place, start_date, end_date, round_instances, time, description, turn_number=4):
+    def __init__(self, name, place, start_date, end_date,
+                 round_instances, time, description, nb_players, turn_number=4):
         """Initialise les détails relatifs au tournoi."""
         self.name = name
         self.place = place
         self.start_date = start_date
         self.end_date = end_date
         self.round_instances = round_instances
+        self.ronde = []
         self.time = time
         self.description = description
+        self.nb_players = nb_players
         self.turn_number = turn_number
         self.players = []
         self.id_tournament = uuid.uuid4()
@@ -21,11 +24,12 @@ class TournamentModel:
         return {
             'name': self.name,
             'place': self.place,
-            'start_date': self.start_date,
-            'end_date': self.end_date,
+            'start_date': str(self.start_date),
+            'end_date': str(self.end_date),
             'round_instances': self.round_instances,
             'time': self.time,
             'description': self.description,
+            'nb_players': self.nb_players,
             'turn_number': self.turn_number,
             'id_tournament': self.id_tournament.hex
             }

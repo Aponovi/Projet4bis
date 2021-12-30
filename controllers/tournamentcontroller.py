@@ -12,14 +12,16 @@ class TournamentController:
 
     def tournament_creation(self):
         serialized_tournaments = []
-        name, place, start_date, end_date, time_control, description = self.view.new_tournament()
+        name, place, start_date, end_date, time_control, description, nb_players, nb_rounds = self.view.new_tournament()
         new_tournament = Tournament_model(name=name,
                                           place=place,
                                           start_date=start_date,
                                           end_date=end_date,
                                           round_instances=[],
                                           time=time_control,
-                                          description=description)
+                                          description=description,
+                                          nb_players=nb_players,
+                                          turn_number=nb_rounds,)
         serialized_tournament = new_tournament.serialized_tournament()
         serialized_tournaments.append(serialized_tournament)
         db = TinyDB('db.json')
@@ -27,7 +29,7 @@ class TournamentController:
         tournaments_table.insert_multiple(serialized_tournaments)
 
         serialized_players = []
-        for i in range(8):
+        for i in range(nb_players):
             new_player = tournament_view.tournament_players(new_tournament)
             player = Player_model(name=new_player[1],
                                   first_name=new_player[2],
@@ -40,7 +42,6 @@ class TournamentController:
             serialized_players.append(serialized_player)
         db = TinyDB('db.json')
         players_table = db.table('players')
-        players_table.truncate()  # clear the table first
         players_table.insert_multiple(serialized_players)
         menucontroller.menu_tournament(new_tournament)
 
@@ -54,7 +55,8 @@ class TournamentController:
                                           round_instances=[],
                                           time="Bullet",
                                           description="description",
-                                          turn_number=4)
+                                          nb_players=8,
+                                          turn_number=4, )
         serialized_tournament = new_tournament.serialized_tournament()
         serialized_tournaments.append(serialized_tournament)
         db = TinyDB('db.json')
@@ -74,6 +76,5 @@ class TournamentController:
             serialized_players.append(serialized_player)
         db = TinyDB('db.json')
         players_table = db.table('players')
-        players_table.truncate()  # clear the table first
         players_table.insert_multiple(serialized_players)
         menucontroller.menu_tournament(new_tournament)

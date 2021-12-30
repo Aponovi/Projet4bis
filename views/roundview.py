@@ -7,26 +7,27 @@ class RoundView:
         self.matches = None
 
     def display_matches(self, new_tour):
-        print("les matches sont les suivants : ")
+        print("\nTour : " + new_tour.name + "\n")
+        print("\nLes matches sont les suivants : \n")
         for i in range(len(new_tour.matches)):
             match = new_tour.matches[i]
-            joueur_1 = match[0]
-            joueur_2 = match[1]
-            to_print = joueur_1[0].first_name
-            to_print += " " + joueur_1[0].name
-            to_print += " (classement : " + str(joueur_1[0].ranking) + ")"
-            to_print += " VS " + joueur_2[0].first_name
-            to_print += " " + joueur_2[0].name
-            to_print += " (classement : " + str(joueur_2[0].ranking) + ")"
+            player_1 = match[0]
+            player_2 = match[1]
+            to_print = player_1[0].first_name
+            to_print += " " + player_1[0].name
+            to_print += " (classement : " + str(player_1[0].ranking) + ")"
+            to_print += " VS " + player_2[0].first_name
+            to_print += " " + player_2[0].name
+            to_print += " (classement : " + str(player_2[0].ranking) + ")"
 
             print(to_print)
 
     def matches_done(self, tour, num_match):
         match = tour[num_match]
-        joueur_1 = match[0]
-        joueur_2 = match[1]
-        name_player_one = joueur_1[0].first_name + " " + joueur_1[0].name
-        name_player_two = joueur_2[0].first_name + " " + joueur_2[0].name
+        player_1 = match[0]
+        player_2 = match[1]
+        name_player_one = player_1[0].first_name + " " + player_1[0].name
+        name_player_two = player_2[0].first_name + " " + player_2[0].name
         print("Saisir le résultat du match :")
         print("1 : Vainqueur " + name_player_one)
         print("2 : Vainqueur " + name_player_two)
