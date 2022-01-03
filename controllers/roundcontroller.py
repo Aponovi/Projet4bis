@@ -15,7 +15,7 @@ class RoundController:
         # generer une nouvelle ronde du tournoi
         new_tour = roundmodel.Round(tournament)
         new_tour.generate_pair(tournament.players, tournament.round_instances)
-        tournament.ronde.apend(new_tour)
+        tournament.ronde.append(new_tour)
         # afficher les résultats de la ronde à jouer
         self.view.display_matches(new_tour)
         serialized_round = new_tour.serialized_round()

@@ -8,7 +8,7 @@ class Round:
 
     def __init__(self, tournament):
         nb_round_past = len(tournament.round_instances)
-        self.name = "Round " + str(nb_round_past)
+        self.name = "Round " + str(nb_round_past+1)
         self.start_date = datetime.datetime.now()
         self.end_date = None
         self.matches = None

@@ -1,5 +1,7 @@
 import uuid
 
+from tinydb import TinyDB
+
 
 class Player:
     """Modèle représentant un joueur."""
@@ -23,7 +25,30 @@ class Player:
             'ranking': self.ranking,
             'id_player': self.id_player.hex,
             'id_tournament': self.id_tournament.hex
-            }
+        }
+
+    @staticmethod
+    def load_players(order_by_ranking=False):
+        db = TinyDB("db.json")
+        players_table = db.table("players")
+        serialized_players = players_table.all()
+        players = []
+        for serialized_player in serialized_players:
+            players.append(Player.deserialized_player(serialized_player))
+        if order_by_ranking is False:
+            players = sorted(players, key=lambda player: player.name)
+        elif order_by_ranking is True:
+            players = sorted(players, key=lambda player: player.ranking)
+        return players
+
+    @staticmethod
+    def deserialized_player(serialized_player):
+        return Player(name=serialized_player["name"],
+                      first_name=serialized_player["first_name"],
+                      birth_date=serialized_player["birth_date"],
+                      gender=serialized_player["gender"],
+                      ranking=serialized_player["ranking"],
+                      id_tournament=serialized_player["id_tournament"])
 
     def update_ranking(self, new_ranking):
         self.ranking = new_ranking

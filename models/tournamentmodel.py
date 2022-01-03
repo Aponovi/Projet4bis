@@ -1,5 +1,7 @@
 import uuid
 
+from tinydb import TinyDB
+
 
 class TournamentModel:
     """Modèle représentant un tournoi."""
@@ -32,7 +34,29 @@ class TournamentModel:
             'nb_players': self.nb_players,
             'turn_number': self.turn_number,
             'id_tournament': self.id_tournament.hex
-            }
+        }
+
+    @staticmethod
+    def load_tournaments():
+        db = TinyDB('db.json')
+        tournaments_table = db.table('tournaments')
+        serialized_tournaments = tournaments_table.all()
+        tournaments = []
+        for serialized_tournament in serialized_tournaments:
+            tournaments.append(TournamentModel.deserialized_tournament(serialized_tournament))
+        return tournaments
+
+    @staticmethod
+    def deserialized_tournament(serialized_tournament):
+        return TournamentModel(name=serialized_tournament["name"],
+                               place=serialized_tournament["place"],
+                               start_date=serialized_tournament["start_date"],
+                               end_date=serialized_tournament["end_date"],
+                               round_instances=serialized_tournament["round_instances"],
+                               time=serialized_tournament["time"],
+                               description=serialized_tournament["description"],
+                               nb_players=serialized_tournament["nb_players"],
+                               turn_number=serialized_tournament["turn_number"])
 
     def add_player(self, player):
         self.players.append(player)

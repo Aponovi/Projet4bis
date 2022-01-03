@@ -7,8 +7,7 @@ class RoundView:
         self.matches = None
 
     def display_matches(self, new_tour):
-        print("\nTour : " + new_tour.name + "\n")
-        print("\nLes matches sont les suivants : \n")
+        print(f"\n{new_tour.name} : Les matches sont les suivants : \n")
         for i in range(len(new_tour.matches)):
             match = new_tour.matches[i]
             player_1 = match[0]
@@ -29,8 +28,8 @@ class RoundView:
         name_player_one = player_1[0].first_name + " " + player_1[0].name
         name_player_two = player_2[0].first_name + " " + player_2[0].name
         print("Saisir le résultat du match :")
-        print("1 : Vainqueur " + name_player_one)
-        print("2 : Vainqueur " + name_player_two)
+        print(f"1 : Vainqueur {name_player_one}")
+        print(f"2 : Vainqueur { name_player_two}")
         print("3 : Match nul")
 
         choice = -1
