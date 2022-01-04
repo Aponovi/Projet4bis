@@ -42,6 +42,15 @@ class Player:
         return players
 
     @staticmethod
+    def load_player(id_player):
+        db = TinyDB("db.json")
+        players_table = db.table("players")
+        serialized_players = players_table.all()
+        for serialized_player in serialized_players:
+            if serialized_player["id_player"] == id_player.hex:
+                return Player.deserialized_player(serialized_player)
+
+    @staticmethod
     def deserialized_player(serialized_player):
         return Player(name=serialized_player["name"],
                       first_name=serialized_player["first_name"],

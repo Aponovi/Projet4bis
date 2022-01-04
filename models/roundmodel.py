@@ -18,12 +18,10 @@ class Round:
             self.start_date = datetime.datetime.now()
         else:
             self.start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S.%f")
-
         if end_date == "" or end_date == "None":
             self.end_date = None
         else:
             self.end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S.%f")
-
         self.matches = None
         self.id_tournament = id_tournament
         if id_round == "":
@@ -143,6 +141,7 @@ class Round:
             else:
                 self.pair_player(players, round_instance, round_row)
             self.matches = round_row
+
             round_instance.append(round_row)
 
     @staticmethod

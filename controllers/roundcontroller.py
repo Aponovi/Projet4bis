@@ -23,6 +23,14 @@ class RoundController:
         db = TinyDB('db.json')
         rounds_table = db.table('rounds')
         rounds_table.insert_multiple(serialized_rounds)
+        serialized_matches = []
+        for match in new_tour.matches:
+            serialized_match = match.serialized_match()
+            serialized_matches.append(serialized_match)
+        db = TinyDB('db.json')
+        tournaments_table = db.table('matches')
+        tournaments_table.insert_multiple(serialized_matches)
+
         menucontroller.menu_tournament(tournament, True)
 
     def round_results(self, tournament):

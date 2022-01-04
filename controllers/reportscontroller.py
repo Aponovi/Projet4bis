@@ -1,5 +1,5 @@
 from controllers import menucontroller
-from models import playermodel, tournamentmodel, roundmodel
+from models import playermodel, tournamentmodel, roundmodel, matchmodel
 from views import display_reportsview
 
 
@@ -56,4 +56,13 @@ class ReportsController:
         menucontroller.start_program()
 
     def matches_tournaments_list(self):
-        pass
+        tournaments = tournamentmodel.TournamentModel.load_tournaments()
+        id_tournament = self.view.tournament_choice(tournaments)
+        matches = matchmodel.Match.load_match()
+        matches_tournament = []
+        for i in range(len(matches)):
+            if matches[i].id_tournament.hex == id_tournament:
+                matches_tournament.append(matches[i])
+        self.view.round_list(matches_tournament)
+        menucontroller.start_program()
+
