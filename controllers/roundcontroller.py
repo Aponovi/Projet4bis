@@ -13,7 +13,7 @@ class RoundController:
     def round_creation(self, tournament):
         serialized_rounds = []
         # generer une nouvelle ronde du tournoi
-        new_tour = roundmodel.Round(tournament)
+        new_tour = roundmodel.Round(len(tournament.round_instances), tournament.id_tournament)
         new_tour.generate_pair(tournament.players, tournament.round_instances)
         tournament.ronde.append(new_tour)
         # afficher les résultats de la ronde à jouer

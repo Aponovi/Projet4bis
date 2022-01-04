@@ -1,6 +1,3 @@
-from controllers import tournamentcontroller
-
-
 def welcome():
     """ Message d'accueil du programme """
     print('\n')
@@ -52,6 +49,7 @@ def tournament_menu(round_in_progress=False):
             print("Choix non reconnu.")
             continue
     return choice
+
 
 def reports_menu():
     print("Menu rapports:\n")

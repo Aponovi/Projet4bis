@@ -1,5 +1,5 @@
 from controllers import menucontroller
-from models import playermodel, tournamentmodel
+from models import playermodel, tournamentmodel, roundmodel
 from views import display_reportsview
 
 
@@ -18,10 +18,26 @@ class ReportsController:
         menucontroller.start_program()
 
     def tournament_players_list_by_alpha_order(self):
-        pass
+        tournaments = tournamentmodel.TournamentModel.load_tournaments()
+        players = playermodel.Player.load_players()
+        id_tournament = self.view.tournament_choice(tournaments)
+        players_tournament = []
+        for i in range(len(players)):
+            if players[i].id_tournament == id_tournament:
+                players_tournament.append(players[i])
+        self.view.players_list(players_tournament, tournaments)
+        menucontroller.start_program()
 
     def tournament_players_list_by_ranking_order(self):
-        pass
+        tournaments = tournamentmodel.TournamentModel.load_tournaments()
+        players = playermodel.Player.load_players(True)
+        id_tournament = self.view.tournament_choice(tournaments)
+        players_tournament = []
+        for i in range(len(players)):
+            if players[i].id_tournament == id_tournament:
+                players_tournament.append(players[i])
+        self.view.players_list(players_tournament, tournaments)
+        menucontroller.start_program()
 
     def tournaments_list(self):
         tournaments = tournamentmodel.TournamentModel.load_tournaments()
@@ -29,7 +45,15 @@ class ReportsController:
         menucontroller.start_program()
 
     def rounds_tournaments_list(self):
-        pass
+        tournaments = tournamentmodel.TournamentModel.load_tournaments()
+        id_tournament = self.view.tournament_choice(tournaments)
+        rondes = roundmodel.Round.load_round()
+        rondes_tournament = []
+        for i in range(len(rondes)):
+            if rondes[i].id_tournament.hex == id_tournament:
+                rondes_tournament.append(rondes[i])
+        self.view.round_list(rondes_tournament)
+        menucontroller.start_program()
 
     def matches_tournaments_list(self):
         pass

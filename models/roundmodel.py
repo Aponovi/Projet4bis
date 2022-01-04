@@ -1,19 +1,35 @@
 import datetime
 import uuid
+
+from tinydb import TinyDB
+
 from models import matchmodel
 
 
 class Round:
     """Modèle représentant un tour."""
 
-    def __init__(self, tournament):
-        nb_round_past = len(tournament.round_instances)
-        self.name = "Round " + str(nb_round_past+1)
-        self.start_date = datetime.datetime.now()
-        self.end_date = None
+    def __init__(self, nb_round_past, id_tournament, id_round="", name="", start_date="", end_date=""):
+        if name == "":
+            self.name = "Round " + str(nb_round_past+1)
+        else:
+            self.name = name
+        if start_date == "":
+            self.start_date = datetime.datetime.now()
+        else:
+            self.start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S.%f")
+
+        if end_date == "" or end_date == "None":
+            self.end_date = None
+        else:
+            self.end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S.%f")
+
         self.matches = None
-        self.id_tournament = tournament.id_tournament
-        self.id_round = uuid.uuid4()
+        self.id_tournament = id_tournament
+        if id_round == "":
+            self.id_round = uuid.uuid4()
+        else:
+            self.id_round = uuid.UUID(id_round)
 
     def serialized_round(self):
         return {
@@ -23,6 +39,16 @@ class Round:
             'id_tournament': self.id_tournament.hex,
             'id_round': self.id_round.hex
             }
+
+    @staticmethod
+    def deserialized_round(serialized_round):
+        return Round(
+            nb_round_past=0,
+            id_tournament=uuid.UUID(serialized_round["id_tournament"]),
+            id_round=serialized_round["id_round"],
+            name=serialized_round["name"],
+            start_date=serialized_round["start_date"],
+            end_date=serialized_round["end_date"])
 
     def generate_first_pair(self, players, round_row):
         """Premières paires générées selon le système de tournoi suisse"""
@@ -118,3 +144,13 @@ class Round:
                 self.pair_player(players, round_instance, round_row)
             self.matches = round_row
             round_instance.append(round_row)
+
+    @staticmethod
+    def load_round():
+        db = TinyDB('db.json')
+        rounds_table = db.table('rounds')
+        serialized_rounds = rounds_table.all()
+        rounds = []
+        for serialized_round in serialized_rounds:
+            rounds.append(Round.deserialized_round(serialized_round))
+        return rounds

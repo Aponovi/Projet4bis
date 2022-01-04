@@ -7,7 +7,7 @@ class TournamentModel:
     """Modèle représentant un tournoi."""
 
     def __init__(self, name, place, start_date, end_date,
-                 round_instances, time, description, nb_players, turn_number=4):
+                 round_instances, time, description, nb_players, turn_number=4, id_tournament=""):
         """Initialise les détails relatifs au tournoi."""
         self.name = name
         self.place = place
@@ -20,7 +20,10 @@ class TournamentModel:
         self.nb_players = nb_players
         self.turn_number = turn_number
         self.players = []
-        self.id_tournament = uuid.uuid4()
+        if id_tournament == "":
+            self.id_tournament = uuid.uuid4()
+        else:
+            self.id_tournament = uuid.UUID(id_tournament)
 
     def serialized_tournament(self):
         return {
@@ -56,7 +59,8 @@ class TournamentModel:
                                time=serialized_tournament["time"],
                                description=serialized_tournament["description"],
                                nb_players=serialized_tournament["nb_players"],
-                               turn_number=serialized_tournament["turn_number"])
+                               turn_number=serialized_tournament["turn_number"],
+                               id_tournament=serialized_tournament["id_tournament"])
 
     def add_player(self, player):
         self.players.append(player)
