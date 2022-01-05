@@ -48,8 +48,8 @@ class TournamentController:
     @staticmethod
     def tournament_creation_test():
         serialized_tournaments = []
-        new_tournament = Tournament_model(name="name",
-                                          place="place",
+        new_tournament = Tournament_model(name="name1",
+                                          place="place1",
                                           start_date="22/10/2021",
                                           end_date="22/10/2021",
                                           round_instances=[],

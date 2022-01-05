@@ -60,8 +60,14 @@ class ReportsController:
         id_tournament = self.view.tournament_choice(tournaments)
         matches = matchmodel.Match.load_match()
         matches_tournament = []
-        for i in range(len(matches)):
-            if matches[i].id_tournament.hex == id_tournament:
+        rondes = roundmodel.Round.load_round()
+        rondes_tournament = []
+        for i in range(len(rondes)):
+            if rondes[i].id_tournament.hex == id_tournament:
+                rondes_tournament.append(rondes[i])
+            for
+        for j in range(len(rondes_tournament)):
+            if matches[j].id_tournament.hex == id_tournament:
                 matches_tournament.append(matches[i])
         self.view.round_list(matches_tournament)
         menucontroller.start_program()

@@ -20,11 +20,6 @@ class Display_ReportsView:
             print(form.format(*tournaments))
 
     def round_list(self, rondes):
-        # print(f"\nListe des rondes du tournoi {tournament_name} : \n")
-        # rounds = []
-        # if tournament_id in rounds:
-        # for ronde in rounds:
-        #     print(ronde)
         for ronde in rondes:
             form = f"{ronde.name:20}" \
                    f"du {str(ronde.start_date):10} au {str(ronde.end_date):10}"

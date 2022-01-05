@@ -23,6 +23,7 @@ class Round:
         else:
             self.end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S.%f")
         self.matches = None
+        self.matches_model = []
         self.id_tournament = id_tournament
         if id_round == "":
             self.id_round = uuid.uuid4()
@@ -60,6 +61,7 @@ class Round:
         for index in range(nb_matches):
             # competitors = ([players_sup[index], 0], [players_inf[index], 0])
             competitors = matchmodel.Match(players_sup[index], 0, players_inf[index], 0, self.id_round)
+            self.matches_model.append(competitors)
             round_row.append(competitors.match_tuple())
 
     @staticmethod
@@ -118,6 +120,7 @@ class Round:
             index_player_2 = index_player_2_tmp
             competitors = matchmodel.Match(players[index_player_1], 0, players[index_player_2], 0, self.id_round)
             round_row.append(competitors.match_tuple())
+            self.matches_model.append(competitors)
             previous_matches.append(index_player_1)
             previous_matches.append(index_player_2)
 
@@ -141,6 +144,7 @@ class Round:
             else:
                 self.pair_player(players, round_instance, round_row)
             self.matches = round_row
+
 
             round_instance.append(round_row)
 

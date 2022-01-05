@@ -1,5 +1,7 @@
 import uuid
 
+from tinydb import TinyDB
+
 from models import playermodel
 
 
@@ -44,7 +46,7 @@ class Match:
     def deserialized_match(serialized_match):
         return Match(
             id_round=uuid.UUID(serialized_match["id_round"]),
-            id_match=uuid.UUID(serialized_match["id_match"]),
+            id_match=serialized_match["id_match"],
             id_player_1=uuid.UUID(serialized_match["id_player_1"]),
             id_player_2=uuid.UUID(serialized_match["id_player_2"]),
             player_1=None,
@@ -70,9 +72,9 @@ class Match:
     @staticmethod
     def load_match():
         db = TinyDB('db.json')
-        rounds_table = db.table('rounds')
-        serialized_rounds = rounds_table.all()
-        rounds = []
-        for serialized_round in serialized_rounds:
-            rounds.append(Round.deserialized_round(serialized_round))
-        return rounds
+        matches_table = db.table('matches')
+        serialized_matches = matches_table.all()
+        matches = []
+        for serialized_match in serialized_matches:
+            matches.append(Match.deserialized_match(serialized_match))
+        return matches
