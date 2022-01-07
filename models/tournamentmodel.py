@@ -1,14 +1,16 @@
 import uuid
 
-from tinydb import TinyDB
+from tinydb import TinyDB, where
 
 
 class TournamentModel:
     """Modèle représentant un tournoi."""
 
     def __init__(self, name, place, start_date, end_date,
-                 round_instances, time, description, nb_players, turn_number=4, id_tournament=""):
+                 round_instances, time, description, nb_players, turn_number=4, 
+                 id_tournament="", tournament_over=False):
         """Initialise les détails relatifs au tournoi."""
+        self.tournament_over = tournament_over
         self.name = name
         self.place = place
         self.start_date = start_date
@@ -36,8 +38,9 @@ class TournamentModel:
             'description': self.description,
             'nb_players': self.nb_players,
             'turn_number': self.turn_number,
-            'id_tournament': self.id_tournament.hex
-        }
+            'id_tournament': self.id_tournament.hex,
+            'tournament_over': self.tournament_over
+            }
 
     @staticmethod
     def load_tournaments():
@@ -50,6 +53,15 @@ class TournamentModel:
         return tournaments
 
     @staticmethod
+    def load_last_tournament():
+        db = TinyDB('db.json')
+        tournaments_table = db.table('tournaments')
+        serialized_tournaments = tournaments_table.all()
+        for serialized_tournament in serialized_tournaments:
+            if serialized_tournament["tournament_over"] == "False":
+                return TournamentModel.deserialized_tournament(serialized_tournament)
+
+    @staticmethod
     def deserialized_tournament(serialized_tournament):
         return TournamentModel(name=serialized_tournament["name"],
                                place=serialized_tournament["place"],
@@ -60,7 +72,14 @@ class TournamentModel:
                                description=serialized_tournament["description"],
                                nb_players=serialized_tournament["nb_players"],
                                turn_number=serialized_tournament["turn_number"],
-                               id_tournament=serialized_tournament["id_tournament"])
+                               id_tournament=serialized_tournament["id_tournament"],
+                               tournament_over=serialized_tournament["tournament_over"]
+                               )
+
+    def maj_tournament_over(self):
+        db = TinyDB("db.json")
+        table = db.table("tournaments")
+        table.update({"tournament_over": str(self.tournament_over)}, where("id_tournament") == self.id_tournament.hex)
 
     def add_player(self, player):
         self.players.append(player)
@@ -101,3 +120,4 @@ class TournamentModel:
             players_scores_trie.append((joueur_max_score, players_scores[joueur_max_score]))
             del players_scores[joueur_max_score]
         return players_scores_trie
+

@@ -25,8 +25,21 @@ class Display_ReportsView:
                    f"du {str(ronde.start_date):10} au {str(ronde.end_date):10}"
             print(form.format(*rondes))
 
-    def matches_list(self, tournament_id):
-        pass
+    def matches_list(self, matches):
+        print("\nListe des matches : \n")
+        for match in matches:
+            if match.results_player_1 == 1:
+                results_match = f"Victoire {match.player_1.name}"
+            elif match.results_player_2 == 1:
+                results_match = f"Victoire {match.player_2.name}"
+            elif match.results_player_1 == 0.5 and match.results_player_2 == 0.5:
+                results_match = "Match nul"
+            else:
+                results_match = "Match non joué"
+            form = f"{str(match.player_1.name):10}{str(match.player_1.first_name):10}   vs   " \
+                   f"{str(match.player_2.name):10}{str(match.player_2.first_name):10}" \
+                   f"   Résultat : {results_match}"
+            print(form.format(*matches))
 
     def tournament_choice(self, tournaments):
         print("\nVeuillez sélectionner un tournoi : \n")
@@ -46,4 +59,4 @@ class Display_ReportsView:
             if choice > len(tournaments) or choice < 0:
                 print("Choix non reconnu.")
                 continue
-        return tournaments[choice-1].id_tournament.hex
+        return tournaments[choice - 1].id_tournament.hex

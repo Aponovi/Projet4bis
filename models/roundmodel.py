@@ -1,7 +1,7 @@
 import datetime
 import uuid
 
-from tinydb import TinyDB
+from tinydb import TinyDB, where, Query
 
 from models import matchmodel
 
@@ -48,6 +48,11 @@ class Round:
             name=serialized_round["name"],
             start_date=serialized_round["start_date"],
             end_date=serialized_round["end_date"])
+
+    def maj_end_date(self):
+        db = TinyDB("db.json")
+        table = db.table("rounds")
+        table.update({"end_date": str(self.end_date)}, where("id_round") == self.id_round.hex)
 
     def generate_first_pair(self, players, round_row):
         """Premières paires générées selon le système de tournoi suisse"""

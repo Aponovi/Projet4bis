@@ -65,10 +65,10 @@ class ReportsController:
         for i in range(len(rondes)):
             if rondes[i].id_tournament.hex == id_tournament:
                 rondes_tournament.append(rondes[i])
-            for
-        for j in range(len(rondes_tournament)):
-            if matches[j].id_tournament.hex == id_tournament:
-                matches_tournament.append(matches[i])
-        self.view.round_list(matches_tournament)
+        for k in range(len(matches)):
+            for j in range(len(rondes_tournament)):
+                if matches[k].id_round.hex == rondes_tournament[j].id_round.hex:
+                    matches_tournament.append(matches[k])
+        self.view.matches_list(matches_tournament)
         menucontroller.start_program()
 

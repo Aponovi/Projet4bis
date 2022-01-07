@@ -1,8 +1,11 @@
+from models import tournamentmodel, playermodel
 from views import menuview, tournamentview
 from controllers import tournamentcontroller, roundcontroller, playercontroller, reportscontroller
 
 
 def start_program():
+    tournament = tournamentmodel.TournamentModel.load_last_tournament()
+    tournament.players = playermodel.Player.load_players_by_tournament(tournament.id_tournament)
     menuview.welcome()
     choice = menuview.main_menu()
 

@@ -51,6 +51,15 @@ class Player:
                 return Player.deserialized_player(serialized_player)
 
     @staticmethod
+    def load_players_by_tournament(id_tournament):
+        players = Player.load_players()
+        players_tournament = []
+        for i in range(len(players)):
+            if players[i].id_tournament == id_tournament:
+                players_tournament.append(players[i])
+        return players_tournament
+
+    @staticmethod
     def deserialized_player(serialized_player):
         return Player(name=serialized_player["name"],
                       first_name=serialized_player["first_name"],

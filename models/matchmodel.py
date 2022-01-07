@@ -1,31 +1,19 @@
 import uuid
 
-from tinydb import TinyDB
+from tinydb import TinyDB, where
 
 from models import playermodel
 
 
 class Match:
     def __init__(self, player_1, results_player_1, player_2,
-                 results_player_2, id_round, id_player_1=None, id_player_2=None, id_match=None):
-        if player_1 is not None:
-            self.player_1 = player_1
-        else:
-            self.player_1 = playermodel.Player.load_player(id_player_1)
-        if player_2 is not None:
-            self.player_2 = player_2
-        else:
-            self.player_2 = playermodel.Player.load_player(id_player_2)
+                 results_player_2, id_round, id_match=None):
+        self.player_1 = player_1
+        self.player_2 = player_2
         self.results_player_1 = results_player_1
         self.results_player_2 = results_player_2
-        if id_player_1 is None:
-            self.id_player_1 = player_1.id_player
-        else:
-            self.id_player_1 = id_player_1
-        if id_player_2 is None:
-            self.id_player_2 = player_2.id_player
-        else:
-            self.id_player_2 = id_player_2
+        self.id_player_1 = player_1.id_player
+        self.id_player_2 = player_2.id_player
         self.id_round = id_round
         if id_match is None:
             self.id_match = uuid.uuid4()
@@ -47,13 +35,17 @@ class Match:
         return Match(
             id_round=uuid.UUID(serialized_match["id_round"]),
             id_match=serialized_match["id_match"],
-            id_player_1=uuid.UUID(serialized_match["id_player_1"]),
-            id_player_2=uuid.UUID(serialized_match["id_player_2"]),
-            player_1=None,
+            player_1=playermodel.Player.load_player(uuid.UUID(serialized_match["id_player_1"])),
             results_player_1=serialized_match["results_player_1"],
-            player_2=None,
+            player_2=playermodel.Player.load_player(uuid.UUID(serialized_match["id_player_2"])),
             results_player_2=serialized_match["results_player_2"],
         )
+
+    def maj_results(self):
+        db = TinyDB("db.json")
+        table = db.table("matches")
+        table.update({"results_player_1": str(self.results_player_1)}, where("id_match") == self.id_match.hex)
+        table.update({"results_player_2": str(self.results_player_2)}, where("id_match") == self.id_match.hex)
 
     def match_tuple(self):
         return [self.player_1, self.results_player_1], [self.player_2, self.results_player_2]
