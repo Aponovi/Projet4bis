@@ -1,7 +1,7 @@
 import datetime
 import uuid
 
-from tinydb import TinyDB, where, Query
+from tinydb import TinyDB, where
 
 from models import matchmodel
 
@@ -9,19 +9,22 @@ from models import matchmodel
 class Round:
     """Modèle représentant un tour."""
 
-    def __init__(self, nb_round_past, id_tournament, id_round="", name="", start_date="", end_date=""):
+    def __init__(self, nb_round_past, id_tournament, id_round="", name="",
+                 start_date="", end_date=""):
         if name == "":
-            self.name = "Round " + str(nb_round_past+1)
+            self.name = "Round " + str(nb_round_past + 1)
         else:
             self.name = name
         if start_date == "":
             self.start_date = datetime.datetime.now()
         else:
-            self.start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S.%f")
+            self.start_date = datetime \
+                .datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S.%f")
         if end_date == "" or end_date == "None":
             self.end_date = None
         else:
-            self.end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S.%f")
+            self.end_date = datetime \
+                .datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S.%f")
         self.matches = None
         self.matches_model = []
         self.id_tournament = id_tournament
@@ -30,6 +33,12 @@ class Round:
         else:
             self.id_round = uuid.UUID(id_round)
 
+    def save_round(self):
+        serialized_round = self.serialized_round()
+        db = TinyDB('db.json')
+        rounds_table = db.table('rounds')
+        rounds_table.insert(serialized_round)
+
     def serialized_round(self):
         return {
             'name': self.name,
@@ -37,7 +46,7 @@ class Round:
             'end_date': str(self.end_date),
             'id_tournament': self.id_tournament.hex,
             'id_round': self.id_round.hex
-            }
+        }
 
     @staticmethod
     def deserialized_round(serialized_round):
@@ -52,21 +61,27 @@ class Round:
     def maj_end_date(self):
         db = TinyDB("db.json")
         table = db.table("rounds")
-        table.update({"end_date": str(self.end_date)}, where("id_round") == self.id_round.hex)
+        table.update({"end_date": str(self.end_date)},
+                     where("id_round") == self.id_round.hex)
 
     def generate_first_pair(self, players, round_row):
         """Premières paires générées selon le système de tournoi suisse"""
         nb_players = len(players)
         # tri des joueurs par classement
-        players = sorted(players, key=lambda player: player.ranking, reverse=True)
+        players = sorted(
+            players, key=lambda player: player.ranking, reverse=True
+        )
         middle_list = int(nb_players / 2)
         players_sup = players[0: middle_list]
         players_inf = players[middle_list:nb_players]
         nb_matches = len(players_sup)
         for index in range(nb_matches):
             # competitors = ([players_sup[index], 0], [players_inf[index], 0])
-            competitors = matchmodel.Match(players_sup[index], 0, players_inf[index], 0, self.id_round)
+            competitors = matchmodel.Match(players_sup[index], 0,
+                                           players_inf[index], 0,
+                                           self.id_round)
             self.matches_model.append(competitors)
+            competitors.save_match()
             round_row.append(competitors.match_tuple())
 
     @staticmethod
@@ -116,20 +131,28 @@ class Round:
         index_player_2_tmp = 1
         previous_matches = []
         for m in range(nb_matches):
-            # recherche dans round_instance les matches précédents pour savoir si les joueurs se sont déjà rencontrés
-            while matchmodel.Match.historic_match(round_instance, index_player_1, index_player_2_tmp, players):
+            # recherche dans round_instance les matches précédents pour
+            # savoir si les joueurs se sont déjà rencontrés
+            while matchmodel.Match.historic_match(round_instance,
+                                                  index_player_1,
+                                                  index_player_2_tmp,
+                                                  players):
                 index_player_2_tmp += 1
                 if index_player_2_tmp > nb_players - 1:
                     index_player_2_tmp = index_player_2
                     break
             index_player_2 = index_player_2_tmp
-            competitors = matchmodel.Match(players[index_player_1], 0, players[index_player_2], 0, self.id_round)
+            competitors = matchmodel.Match(players[index_player_1], 0,
+                                           players[index_player_2], 0,
+                                           self.id_round)
+            competitors.save_match()
             round_row.append(competitors.match_tuple())
             self.matches_model.append(competitors)
             previous_matches.append(index_player_1)
             previous_matches.append(index_player_2)
 
-            # joueur in self.players avec plus petit indice n'ayant pas encore de match
+            # joueur in self.players avec plus petit indice n'ayant pas
+            # encore de match
             for ind in range(len(players)):
                 if ind not in previous_matches:
                     index_player_1 = ind
@@ -149,8 +172,6 @@ class Round:
             else:
                 self.pair_player(players, round_instance, round_row)
             self.matches = round_row
-
-
             round_instance.append(round_row)
 
     @staticmethod
@@ -162,3 +183,18 @@ class Round:
         for serialized_round in serialized_rounds:
             rounds.append(Round.deserialized_round(serialized_round))
         return rounds
+
+    @staticmethod
+    def load_round_by_tour(id_tournament):
+        rounds = Round.load_round()
+        rounds_tournament = []
+        for i in range(len(rounds)):
+            if rounds[i].id_tournament == id_tournament:
+                rounds_tournament.append(rounds[i])
+        return rounds_tournament
+
+    def load_match_by_turn(self):
+        matches = matchmodel.Match.load_match()
+        for i in range(len(matches)):
+            if matches[i].id_round == self.id_round:
+                self.matches.append(matches[i])

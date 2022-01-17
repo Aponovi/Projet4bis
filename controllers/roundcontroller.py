@@ -2,7 +2,6 @@ import datetime
 from models import roundmodel
 from views import roundview
 from controllers import menucontroller
-from tinydb import TinyDB
 
 
 class RoundController:
@@ -11,31 +10,19 @@ class RoundController:
         self.view = roundview.RoundView()
 
     def round_creation(self, tournament):
-        serialized_rounds = []
         # generer une nouvelle ronde du tournoi
-        new_tour = roundmodel.Round(len(tournament.round_instances), tournament.id_tournament)
+        new_tour = roundmodel.Round(len(tournament.round_instances),
+                                    tournament.id_tournament)
         new_tour.generate_pair(tournament.players, tournament.round_instances)
-        tournament.ronde.append(new_tour)
+        tournament.turn.append(new_tour)
         # afficher les résultats de la ronde à jouer
         self.view.display_matches(new_tour)
-        serialized_round = new_tour.serialized_round()
-        serialized_rounds.append(serialized_round)
-        db = TinyDB('db.json')
-        rounds_table = db.table('rounds')
-        rounds_table.insert_multiple(serialized_rounds)
-        serialized_matches = []
-        for match in new_tour.matches_model:
-            serialized_match = match.serialized_match()
-            serialized_matches.append(serialized_match)
-        db = TinyDB('db.json')
-        matches_table = db.table('matches')
-        matches_table.insert_multiple(serialized_matches)
-
+        new_tour.save_round()
         menucontroller.menu_tournament(tournament, True)
 
     def round_results(self, tournament):
         tour = tournament.round_instances[len(tournament.round_instances)-1]
-        ronde = tournament.ronde[len(tournament.ronde) - 1]
+        ronde = tournament.turn[len(tournament.turn) - 1]
         for i in range(len(tour)):
             choix = self.view.matches_done(tour, i)
             match_instance = tour[i]
@@ -59,4 +46,4 @@ class RoundController:
         else:
             tournament.tournament_over = True
             tournament.maj_tournament_over()
-            menucontroller.fin_tournament(tournament)
+            menucontroller.end_tournament(tournament)

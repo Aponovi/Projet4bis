@@ -3,7 +3,8 @@ from datetime import datetime
 
 def field_string(wording_input, max_len=100, isalpha=False, isalnum=False):
     value = input(wording_input)
-    while not check_string(value, max_len=max_len, isalpha=isalpha, isalnum=isalnum):
+    while not check_string(value, max_len=max_len, isalpha=isalpha,
+                           isalnum=isalnum):
         print("Saisie incorrecte.")
         value = input(wording_input)
     return value
@@ -18,7 +19,8 @@ def check_string(value_input, max_len=100, isalpha=False, isalnum=False):
         if not value_input.replace('-', '').replace(' ', '').isalpha():
             return False
     if isalnum:
-        if not value_input.replace('-', '').replace(' ', '').replace('.', '').isalnum():
+        if not value_input \
+                .replace('-', '').replace(' ', '').replace('.', '').isalnum():
             return False
 
     return True

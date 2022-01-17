@@ -45,4 +45,3 @@ class RoundView:
                 print("Choix non reconnu.")
                 continue
         return choice
-

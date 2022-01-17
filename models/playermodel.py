@@ -6,7 +6,8 @@ from tinydb import TinyDB
 class Player:
     """Modèle représentant un joueur."""
 
-    def __init__(self, name, first_name, birth_date, gender, ranking, id_tournament):
+    def __init__(self, name, first_name, birth_date, gender, ranking,
+                 id_tournament):
         """Initialise les détails relatifs au joueur."""
         self.name = name
         self.first_name = first_name
@@ -26,6 +27,12 @@ class Player:
             'id_player': self.id_player.hex,
             'id_tournament': self.id_tournament.hex
         }
+
+    def save_player(self):
+        serialized_player = self.serialized_player()
+        db = TinyDB('db.json')
+        players_table = db.table('players')
+        players_table.insert(serialized_player)
 
     @staticmethod
     def load_players(order_by_ranking=False):

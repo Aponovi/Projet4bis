@@ -1,11 +1,19 @@
-from models import tournamentmodel, playermodel
+from models import tournamentmodel, playermodel, roundmodel
 from views import menuview, tournamentview
-from controllers import tournamentcontroller, roundcontroller, playercontroller, reportscontroller
+from controllers import tournamentcontroller, \
+    roundcontroller, \
+    playercontroller, \
+    reportscontroller
 
 
 def start_program():
     tournament = tournamentmodel.TournamentModel.load_last_tournament()
-    tournament.players = playermodel.Player.load_players_by_tournament(tournament.id_tournament)
+    tournament.players = playermodel\
+        .Player.load_players_by_tournament(tournament.id_tournament)
+    tournament.turn = roundmodel\
+        .Round.load_round_by_tour(tournament.id_tournament)
+    for turn in tournament.turn:
+        turn.load_match_by_turn()
     menuview.welcome()
     choice = menuview.main_menu()
 
@@ -62,6 +70,6 @@ def menu_tournament(tournament, round_in_progress=False):
         player_controller.update_ranking(tournament, round_in_progress)
 
 
-def fin_tournament(tournament):
+def end_tournament(tournament):
     players = tournament.tournament_results()
     tournamentview.fin_tournoi_affichage(players)

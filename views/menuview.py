@@ -6,8 +6,8 @@ def welcome():
 
 
 def main_menu():
-    """Menu permettant à l'utilisateur de choisir de : créer un tournoi, mettre à jour les classement ou afficher les
-    rapports """
+    """Menu permettant à l'utilisateur de choisir de : créer un tournoi,
+    mettre à jour les classement ou afficher les rapports """
     print("Menu principal:\n")
     print("1 : Créer un nouveau tournoi")
     print("2 : Afficher les rapports")

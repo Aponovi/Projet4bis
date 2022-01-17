@@ -7,7 +7,7 @@ class TournamentModel:
     """Modèle représentant un tournoi."""
 
     def __init__(self, name, place, start_date, end_date,
-                 round_instances, time, description, nb_players, turn_number=4, 
+                 round_instances, time, description, nb_players, turn_number=4,
                  id_tournament="", tournament_over=False):
         """Initialise les détails relatifs au tournoi."""
         self.tournament_over = tournament_over
@@ -16,7 +16,7 @@ class TournamentModel:
         self.start_date = start_date
         self.end_date = end_date
         self.round_instances = round_instances
-        self.ronde = []
+        self.turn = []
         self.time = time
         self.description = description
         self.nb_players = nb_players
@@ -26,6 +26,14 @@ class TournamentModel:
             self.id_tournament = uuid.uuid4()
         else:
             self.id_tournament = uuid.UUID(id_tournament)
+
+    def save_tournament(self):
+        serialized_tournaments = []
+        serialized_tournament = self.serialized_tournament()
+        serialized_tournaments.append(serialized_tournament)
+        db = TinyDB('db.json')
+        tournaments_table = db.table('tournaments')
+        tournaments_table.insert_multiple(serialized_tournaments)
 
     def serialized_tournament(self):
         return {
@@ -40,7 +48,7 @@ class TournamentModel:
             'turn_number': self.turn_number,
             'id_tournament': self.id_tournament.hex,
             'tournament_over': self.tournament_over
-            }
+        }
 
     @staticmethod
     def load_tournaments():
@@ -49,7 +57,8 @@ class TournamentModel:
         serialized_tournaments = tournaments_table.all()
         tournaments = []
         for serialized_tournament in serialized_tournaments:
-            tournaments.append(TournamentModel.deserialized_tournament(serialized_tournament))
+            tournaments.append(TournamentModel
+                               .deserialized_tournament(serialized_tournament))
         return tournaments
 
     @staticmethod
@@ -59,27 +68,29 @@ class TournamentModel:
         serialized_tournaments = tournaments_table.all()
         for serialized_tournament in serialized_tournaments:
             if serialized_tournament["tournament_over"] == "False":
-                return TournamentModel.deserialized_tournament(serialized_tournament)
+                return TournamentModel\
+                    .deserialized_tournament(serialized_tournament)
 
     @staticmethod
-    def deserialized_tournament(serialized_tournament):
-        return TournamentModel(name=serialized_tournament["name"],
-                               place=serialized_tournament["place"],
-                               start_date=serialized_tournament["start_date"],
-                               end_date=serialized_tournament["end_date"],
-                               round_instances=serialized_tournament["round_instances"],
-                               time=serialized_tournament["time"],
-                               description=serialized_tournament["description"],
-                               nb_players=serialized_tournament["nb_players"],
-                               turn_number=serialized_tournament["turn_number"],
-                               id_tournament=serialized_tournament["id_tournament"],
-                               tournament_over=serialized_tournament["tournament_over"]
+    def deserialized_tournament(srz_tour):
+        return TournamentModel(name=srz_tour["name"],
+                               place=srz_tour["place"],
+                               start_date=srz_tour["start_date"],
+                               end_date=srz_tour["end_date"],
+                               round_instances=srz_tour["round_instances"],
+                               time=srz_tour["time"],
+                               description=srz_tour["description"],
+                               nb_players=srz_tour["nb_players"],
+                               turn_number=srz_tour["turn_number"],
+                               id_tournament=srz_tour["id_tournament"],
+                               tournament_over=srz_tour["tournament_over"]
                                )
 
     def maj_tournament_over(self):
         db = TinyDB("db.json")
         table = db.table("tournaments")
-        table.update({"tournament_over": str(self.tournament_over)}, where("id_tournament") == self.id_tournament.hex)
+        table.update({"tournament_over": str(self.tournament_over)},
+                     where("id_tournament") == self.id_tournament.hex)
 
     def add_player(self, player):
         self.players.append(player)
@@ -91,33 +102,33 @@ class TournamentModel:
             for match in tour:
                 first_element = match[0]
                 second_element = match[1]
-                premier_joueur = first_element[0]
-                deuxieme_joueur = second_element[0]
-                if premier_joueur in players_scores:
-                    players_scores[premier_joueur] += first_element[1]
+                first_player = first_element[0]
+                second_player = second_element[0]
+                if first_player in players_scores:
+                    players_scores[first_player] += first_element[1]
                 else:
-                    players_scores[premier_joueur] = first_element[1]
-                if deuxieme_joueur in players_scores:
-                    players_scores[deuxieme_joueur] += second_element[1]
+                    players_scores[first_player] = first_element[1]
+                if second_player in players_scores:
+                    players_scores[second_player] += second_element[1]
                 else:
-                    players_scores[deuxieme_joueur] = second_element[1]
+                    players_scores[second_player] = second_element[1]
         """Tri les joueurs selon leur score et leur classement"""
         players_scores_trie = []
         while len(players_scores) > 0:
             max_score = 0
-            joueur_max_score = None
-            for joueur in players_scores:
-                if joueur_max_score is None:
-                    max_score = players_scores[joueur]
-                    joueur_max_score = joueur
+            player_max_score = None
+            for player in players_scores:
+                if player_max_score is None:
+                    max_score = players_scores[player]
+                    player_max_score = player
                 else:
-                    if players_scores[joueur] > max_score:
-                        max_score = players_scores[joueur]
-                        joueur_max_score = joueur
-                    elif players_scores[joueur] == max_score:
-                        if joueur.ranking > joueur_max_score.ranking:
-                            joueur_max_score = joueur
-            players_scores_trie.append((joueur_max_score, players_scores[joueur_max_score]))
-            del players_scores[joueur_max_score]
+                    if players_scores[player] > max_score:
+                        max_score = players_scores[player]
+                        player_max_score = player
+                    elif players_scores[player] == max_score:
+                        if player.ranking > player_max_score.ranking:
+                            player_max_score = player
+            players_scores_trie\
+                .append((player_max_score, players_scores[player_max_score]))
+            del players_scores[player_max_score]
         return players_scores_trie
-
