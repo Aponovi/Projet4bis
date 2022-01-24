@@ -197,4 +197,4 @@ class Round:
         matches = matchmodel.Match.load_match()
         for i in range(len(matches)):
             if matches[i].id_round == self.id_round:
-                self.matches.append(matches[i])
+                self.matches_model.append(matches[i])

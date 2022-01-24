@@ -8,12 +8,25 @@ from controllers import tournamentcontroller, \
 
 def start_program():
     tournament = tournamentmodel.TournamentModel.load_last_tournament()
-    tournament.players = playermodel\
-        .Player.load_players_by_tournament(tournament.id_tournament)
-    tournament.turn = roundmodel\
-        .Round.load_round_by_tour(tournament.id_tournament)
-    for turn in tournament.turn:
-        turn.load_match_by_turn()
+    if tournament is not None:
+        tournament.players = playermodel\
+            .Player.load_players_by_tournament(tournament.id_tournament)
+        tournament.turn = roundmodel\
+            .Round.load_round_by_tour(tournament.id_tournament)
+        round_instances = []
+        i = 0
+        last_match_completed = False
+        for turn in tournament.turn:
+            turn.load_match_by_turn()
+            for match in turn.matches_model:
+                turn.matches.append(match.match_tuple())
+                if i == len(tournament.turn):
+                    if match.results_player_1 != 0:
+                        last_match_completed = True
+            round_instances.append(turn.matches)
+            i += 1
+        tournament.round_instances = round_instances
+        menu_tournament(tournament, not last_match_completed)
     menuview.welcome()
     choice = menuview.main_menu()
 
