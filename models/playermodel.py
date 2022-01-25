@@ -1,20 +1,23 @@
 import uuid
 
-from tinydb import TinyDB
+from tinydb import TinyDB, where
 
 
 class Player:
     """Modèle représentant un joueur."""
 
     def __init__(self, name, first_name, birth_date, gender, ranking,
-                 id_tournament):
+                 id_tournament, id_player=""):
         """Initialise les détails relatifs au joueur."""
         self.name = name
         self.first_name = first_name
         self.birth_date = birth_date
         self.gender = gender
         self.ranking = ranking
-        self.id_player = uuid.uuid4()
+        if id_player == "":
+            self.id_player = uuid.uuid4()
+        else:
+            self.id_player = uuid.UUID(id_player)
         self.id_tournament = id_tournament
 
     def serialized_player(self):
@@ -73,7 +76,12 @@ class Player:
                       birth_date=serialized_player["birth_date"],
                       gender=serialized_player["gender"],
                       ranking=serialized_player["ranking"],
-                      id_tournament=serialized_player["id_tournament"])
+                      id_tournament=serialized_player["id_tournament"],
+                      id_player=serialized_player["id_player"])
 
     def update_ranking(self, new_ranking):
         self.ranking = new_ranking
+        db = TinyDB("db.json")
+        table = db.table("players")
+        table.update({"ranking": str(self.ranking)},
+                     where("id_player") == self.id_player.hex)
