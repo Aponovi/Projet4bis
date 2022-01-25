@@ -11,10 +11,11 @@ def main_menu():
     print("Menu principal:\n")
     print("1 : Créer un nouveau tournoi")
     print("2 : Afficher les rapports")
-    print("\n3 : TEST Tournoi\n")
+    print("3 : Quitter le programme")
+    print("\n4 : TEST Tournoi\n")
 
     choice = -1
-    while choice < 0 or choice > 3:
+    while choice < 0 or choice > 4:
         choice = input("Votre choix : ")
         try:
             choice = int(choice)
@@ -22,7 +23,7 @@ def main_menu():
             print(f"{choice} n'est pas un nombre!")
             choice = -1
             continue
-        if choice > 3 or choice < 0:
+        if choice > 4 or choice < 0:
             print("Choix non reconnu.")
             continue
     return choice
@@ -34,10 +35,11 @@ def tournament_menu(round_in_progress=False):
         print("1 : Générer une ronde.")
     else:
         print("1 : Saisir les scores de la ronde en cours")
-    print("2 : Mettre à jour les classements.\n")
+    print("2 : Mettre à jour les classements\n")
+    print("3 : Quitter le programme \n")
 
     choice = -1
-    while choice < 0 or choice > 2:
+    while choice < 0 or choice > 3:
         choice = input("Votre choix : ")
         try:
             choice = int(choice)
@@ -45,7 +47,7 @@ def tournament_menu(round_in_progress=False):
             print("Choix non reconnu.")
             choice = -1
             continue
-        if choice > 2 or choice < 0:
+        if choice > 3 or choice < 0:
             print("Choix non reconnu.")
             continue
     return choice

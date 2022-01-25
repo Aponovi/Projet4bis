@@ -1,3 +1,5 @@
+import sys
+
 from models import tournamentmodel, playermodel, roundmodel
 from views import menuview, tournamentview
 from controllers import tournamentcontroller, \
@@ -9,9 +11,9 @@ from controllers import tournamentcontroller, \
 def start_program():
     tournament = tournamentmodel.TournamentModel.load_last_tournament()
     if tournament is not None:
-        tournament.players = playermodel\
+        tournament.players = playermodel \
             .Player.load_players_by_tournament(tournament.id_tournament)
-        tournament.turn = roundmodel\
+        tournament.turn = roundmodel \
             .Round.load_round_by_tour(tournament.id_tournament)
         round_instances = []
         i = 0
@@ -33,10 +35,6 @@ def start_program():
     if choice == 1:
         controller_tournament = tournamentcontroller.TournamentController()
         controller_tournament.tournament_creation()
-
-    elif choice == 3:
-        controller_tournament = tournamentcontroller.TournamentController()
-        controller_tournament.tournament_creation_test()
 
     elif choice == 2:
         controller_reports = reportscontroller.ReportsController()
@@ -65,6 +63,13 @@ def start_program():
         elif choice_reports == 8:
             controller_reports.matches_tournaments_list()
 
+    elif choice == 3:
+        bye_bye()
+
+    elif choice == 4:
+        controller_tournament = tournamentcontroller.TournamentController()
+        controller_tournament.tournament_creation_test()
+
 
 def menu_tournament(tournament, round_in_progress=False):
     choice = menuview.tournament_menu(round_in_progress)
@@ -86,3 +91,7 @@ def menu_tournament(tournament, round_in_progress=False):
 def end_tournament(tournament):
     players = tournament.tournament_results()
     tournamentview.fin_tournoi_affichage(players)
+
+
+def bye_bye():
+    sys.exit()
