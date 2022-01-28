@@ -35,7 +35,7 @@ def tournament_menu(round_in_progress=False):
         print("1 : Générer une ronde.")
     else:
         print("1 : Saisir les scores de la ronde en cours")
-    print("2 : Mettre à jour les classements\n")
+    print("2 : Mettre à jour les classements")
     print("3 : Quitter le programme \n")
 
     choice = -1

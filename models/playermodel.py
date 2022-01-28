@@ -65,7 +65,7 @@ class Player:
         players = Player.load_players()
         players_tournament = []
         for i in range(len(players)):
-            if players[i].id_tournament == id_tournament:
+            if players[i].id_tournament == id_tournament.hex:
                 players_tournament.append(players[i])
         return players_tournament
 

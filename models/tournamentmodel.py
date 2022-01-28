@@ -67,7 +67,7 @@ class TournamentModel:
         tournaments_table = db.table('tournaments')
         serialized_tournaments = tournaments_table.all()
         for serialized_tournament in serialized_tournaments:
-            if serialized_tournament["tournament_over"] == "False":
+            if not serialized_tournament["tournament_over"]:
                 return TournamentModel\
                     .deserialized_tournament(serialized_tournament)
 

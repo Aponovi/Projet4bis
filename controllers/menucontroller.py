@@ -16,10 +16,11 @@ def start_program():
         tournament.turn = roundmodel \
             .Round.load_round_by_tour(tournament.id_tournament)
         round_instances = []
-        i = 0
+        i = 1
         last_match_completed = False
         for turn in tournament.turn:
             turn.load_match_by_turn()
+            turn.matches = []
             for match in turn.matches_model:
                 turn.matches.append(match.match_tuple())
                 if i == len(tournament.turn):
@@ -86,6 +87,8 @@ def menu_tournament(tournament, round_in_progress=False):
         """Mettre à jour classement"""
         player_controller = playercontroller.PlayerController()
         player_controller.update_ranking(tournament, round_in_progress)
+    elif choice == 3:
+        bye_bye()
 
 
 def end_tournament(tournament):
