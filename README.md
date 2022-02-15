@@ -14,7 +14,7 @@ L'application permet de gérer des tournois d'échecs selon le système de tourn
 
 ### Installation et exécution de l'application sans pipenv (avec venv et pip)
 1. Cloner ce dépôt de code à l'aide de la commande `$ git clone clone https://github.com/Aponovi/Projet4bis.git` (vous pouvez également télécharger le code en temps qu'archive zip)
-2. Rendez-vous depuis un terminal à la racine du répertoire ocmovies-api-fr avec la commande `$ cd Projet4bis`
+2. Rendez-vous depuis un terminal à la racine du répertoire Projet4bis avec la commande `$ cd Projet4bis`
 3. Créer un environnement virtuel pour le projet avec `$ python -m venv env` sous windows ou `$ python3 -m venv env` sous macos ou linux.
 4. Activez l'environnement virtuel avec `$ env\Scripts\activate` sous windows ou `$ source env/bin/activate` sous macos ou linux.
 5. Installez les dépendances du projet avec la commande `$ pip install -r requirements.txt`
@@ -78,3 +78,8 @@ A tout moment du tournoi grace à l'option "Mettre à jour les classements (choi
  Saisir le numéro de l'option choisie, le rapport généré s'affiche dans la console.
  
  
+## GENERER UN RAPPORT FLAKE8 HTML
+
+  1.Rendez-vous depuis un terminal à la racine du répertoire Projet4bis avec la commande `$ cd Projet4bis`  
+  2.Générer un nouveau rapport avec `$ flake8 --format=html --htmldir=flake8_rapport`
+  3.Consulter le rapport qui se situe dans le dossier "flake8_rapport" en ouvrant "index.html".
