@@ -2,7 +2,7 @@ import uuid
 
 from tinydb import TinyDB, where
 
-from models import playermodel
+from models import player
 
 
 class Match:
@@ -41,10 +41,10 @@ class Match:
         return Match(
             id_round=uuid.UUID(serialized_match["id_round"]),
             id_match=serialized_match["id_match"],
-            player_1=playermodel.Player.load_player(
+            player_1=player.Player.load_player(
                 uuid.UUID(serialized_match["id_player_1"])),
             results_player_1=serialized_match["results_player_1"],
-            player_2=playermodel.Player.load_player(
+            player_2=player.Player.load_player(
                 uuid.UUID(serialized_match["id_player_2"])),
             results_player_2=serialized_match["results_player_2"],
         )
@@ -58,7 +58,7 @@ class Match:
                      where("id_match") == self.id_match.hex)
 
     def match_tuple(self):
-        return [self.player_1, self.results_player_1],\
+        return [self.player_1, self.results_player_1], \
                [self.player_2, self.results_player_2]
 
     @staticmethod

@@ -1,45 +1,44 @@
 import sys
 
-from models import tournamentmodel, playermodel, roundmodel
-from views import menuview, tournamentview
-from controllers import tournamentcontroller, \
-    roundcontroller, \
-    playercontroller, \
-    reportscontroller
+from models import player as player_m, round as round_m, tournament as tour_m
+from views import menu
+from controllers import player as player_c,\
+    round as round_c, \
+    reports
 
 
 def start_program():
-    tournament = tournamentmodel.TournamentModel.load_last_tournament()
-    if tournament is not None:
-        tournament.players = playermodel \
-            .Player.load_players_by_tournament(tournament.id_tournament)
-        tournament.turn = roundmodel \
-            .Round.load_round_by_tour(tournament.id_tournament)
+    tour = tour_m.TournamentModel.load_last_tournament()
+    if tour is not None:
+        tour.players = player_m \
+            .Player.load_players_by_tournament(tour.id_tournament)
+        tour.turn = round_m \
+            .Round.load_round_by_tour(tour.id_tournament)
         round_instances = []
         i = 1
         last_match_completed = False
-        for turn in tournament.turn:
+        for turn in tour.turn:
             turn.load_match_by_turn()
             turn.matches = []
             for match in turn.matches_model:
                 turn.matches.append(match.match_tuple())
-                if i == len(tournament.turn):
+                if i == len(tour.turn):
                     if match.results_player_1 != 0:
                         last_match_completed = True
             round_instances.append(turn.matches)
             i += 1
-        tournament.round_instances = round_instances
-        menu_tournament(tournament, not last_match_completed)
-    menuview.welcome()
-    choice = menuview.main_menu()
+        tour.round_instances = round_instances
+        menu_tournament(tour, not last_match_completed)
+    menu.welcome()
+    choice = menu.main_menu()
 
     if choice == 1:
-        controller_tournament = tournamentcontroller.TournamentController()
+        controller_tournament = tour.TournamentController()
         controller_tournament.tournament_creation()
 
     elif choice == 2:
-        controller_reports = reportscontroller.ReportsController()
-        choice_reports = menuview.reports_menu()
+        controller_reports = reports.ReportsController()
+        choice_reports = menu.reports_menu()
         if choice_reports == 1:
             start_program()
 
@@ -68,32 +67,32 @@ def start_program():
         bye_bye()
 
     elif choice == 4:
-        controller_tournament = tournamentcontroller.TournamentController()
+        controller_tournament = tour.TournamentController()
         controller_tournament.tournament_creation_test()
 
 
-def menu_tournament(tournament, round_in_progress=False):
-    choice = menuview.tournament_menu(round_in_progress)
+def menu_tournament(tour, round_in_progress=False):
+    choice = menu.tournament_menu(round_in_progress)
     if choice == 1:
         if not round_in_progress:
             """Générer une ronde"""
-            round_controller = roundcontroller.RoundController()
-            round_controller.round_creation(tournament)
+            round_controller = round_c.RoundController()
+            round_controller.round_creation(tour)
         else:
             """Saisir les scores de la ronde"""
-            round_controller = roundcontroller.RoundController()
-            round_controller.round_results(tournament)
+            round_controller = round_c.RoundController()
+            round_controller.round_results(tour)
     elif choice == 2:
         """Mettre à jour classement"""
-        player_controller = playercontroller.PlayerController()
-        player_controller.update_ranking(tournament, round_in_progress)
+        player_controller = player_c.PlayerController()
+        player_controller.update_ranking(tour, round_in_progress)
     elif choice == 3:
         bye_bye()
 
 
-def end_tournament(tournament):
-    players = tournament.tournament_results()
-    tournamentview.fin_tournoi_affichage(players)
+def end_tournament(tour):
+    players = tour.tournament_results()
+    tour.fin_tournoi_affichage(players)
 
 
 def bye_bye():

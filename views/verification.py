@@ -67,5 +67,4 @@ def check_int(value_input, max_len=9999):
             return False
         else:
             return True
-    else:
-        return False
+    return False

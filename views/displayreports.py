@@ -1,4 +1,4 @@
-class Display_ReportsView:
+class DisplayReportsView:
 
     @staticmethod
     def all_players_list(players):

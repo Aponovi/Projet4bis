@@ -1,4 +1,4 @@
-from controllers import menucontroller
+from controllers import menu
 from views import verification
 
 
@@ -104,4 +104,4 @@ def fin_tournoi_affichage(players=None):
         name = player[0].name
         first_name = player[0].first_name
         print(f"{name} {first_name} : {score} points")
-    menucontroller.start_program()
+    menu.start_program()

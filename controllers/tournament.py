@@ -1,7 +1,7 @@
-from controllers import menucontroller
-from views import tournamentview as tournament_view
-from models.tournamentmodel import TournamentModel as Tournament_model
-from models.playermodel import Player as Player_model
+from controllers import menu
+from views import tournament as tournament_view
+from models.tournament import TournamentModel as Tournament_model
+from models.player import Player as Player_model
 
 
 class TournamentController:
@@ -32,7 +32,7 @@ class TournamentController:
                                   id_tournament=new_tournament.id_tournament)
             player.save_player()
             new_tournament.add_player(player)
-        menucontroller.menu_tournament(new_tournament)
+        menu.menu_tournament(new_tournament)
 
     @staticmethod
     def tournament_creation_test():
@@ -56,4 +56,4 @@ class TournamentController:
                                   id_tournament=new_tournament.id_tournament)
             new_tournament.add_player(player)
             player.save_player()
-        menucontroller.menu_tournament(new_tournament)
+        menu.menu_tournament(new_tournament)

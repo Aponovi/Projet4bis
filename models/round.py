@@ -3,7 +3,7 @@ import uuid
 
 from tinydb import TinyDB, where
 
-from models import matchmodel
+from models import match
 
 
 class Round:
@@ -76,10 +76,9 @@ class Round:
         players_inf = players[middle_list:nb_players]
         nb_matches = len(players_sup)
         for index in range(nb_matches):
-            # competitors = ([players_sup[index], 0], [players_inf[index], 0])
-            competitors = matchmodel.Match(players_sup[index], 0,
-                                           players_inf[index], 0,
-                                           self.id_round)
+            competitors = match.Match(players_sup[index], 0,
+                                      players_inf[index], 0,
+                                      self.id_round)
             self.matches_model.append(competitors)
             competitors.save_match()
             round_row.append(competitors.match_tuple())
@@ -89,9 +88,9 @@ class Round:
         """Cumule les scores des joueurs"""
         players_scores = {}
         for tour in round_instances:
-            for match in tour:
-                first_element = match[0]
-                second_element = match[1]
+            for game in tour:
+                first_element = game[0]
+                second_element = game[1]
                 premier_joueur = first_element[0]
                 deuxieme_joueur = second_element[0]
                 if premier_joueur in players_scores:
@@ -133,18 +132,18 @@ class Round:
         for m in range(nb_matches):
             # recherche dans round_instance les matches précédents pour
             # savoir si les joueurs se sont déjà rencontrés
-            while matchmodel.Match.historic_match(round_instance,
-                                                  index_player_1,
-                                                  index_player_2_tmp,
-                                                  players):
+            while match.Match.historic_match(round_instance,
+                                             index_player_1,
+                                             index_player_2_tmp,
+                                             players):
                 index_player_2_tmp += 1
                 if index_player_2_tmp > nb_players - 1:
                     index_player_2_tmp = index_player_2
                     break
             index_player_2 = index_player_2_tmp
-            competitors = matchmodel.Match(players[index_player_1], 0,
-                                           players[index_player_2], 0,
-                                           self.id_round)
+            competitors = match.Match(players[index_player_1], 0,
+                                      players[index_player_2], 0,
+                                      self.id_round)
             competitors.save_match()
             round_row.append(competitors.match_tuple())
             self.matches_model.append(competitors)
@@ -194,7 +193,7 @@ class Round:
         return rounds_tournament
 
     def load_match_by_turn(self):
-        matches = matchmodel.Match.load_match()
+        matches = match.Match.load_match()
         for i in range(len(matches)):
             if matches[i].id_round == self.id_round:
                 self.matches_model.append(matches[i])

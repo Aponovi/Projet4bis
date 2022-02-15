@@ -1,27 +1,28 @@
 import datetime
-from models import roundmodel
-from views import roundview
-from controllers import menucontroller
+from models import round as round_m
+from views import round as round_v
+
+from controllers import menu
 
 
 class RoundController:
 
     def __init__(self):
-        self.view = roundview.RoundView()
+        self.view = round_v.RoundView()
 
     def round_creation(self, tournament):
-        # generer une nouvelle ronde du tournoi
-        new_tour = roundmodel.Round(len(tournament.round_instances),
-                                    tournament.id_tournament)
+        # génerer une nouvelle ronde du tournoi
+        new_tour = round_m.Round(len(tournament.round_instances),
+                                 tournament.id_tournament)
         new_tour.generate_pair(tournament.players, tournament.round_instances)
         tournament.turn.append(new_tour)
         # afficher les résultats de la ronde à jouer
         self.view.display_matches(new_tour)
         new_tour.save_round()
-        menucontroller.menu_tournament(tournament, True)
+        menu.menu_tournament(tournament, True)
 
     def round_results(self, tournament):
-        tour = tournament.round_instances[len(tournament.round_instances)-1]
+        tour = tournament.round_instances[len(tournament.round_instances) - 1]
         ronde = tournament.turn[len(tournament.turn) - 1]
         for i in range(len(tour)):
             choix = self.view.matches_done(tour, i)
@@ -42,8 +43,8 @@ class RoundController:
         ronde.end_date = datetime.datetime.now()
         ronde.maj_end_date()
         if tournament.turn_number > len(tournament.round_instances):
-            menucontroller.menu_tournament(tournament)
+            menu.menu_tournament(tournament)
         else:
             tournament.tournament_over = True
             tournament.maj_tournament_over()
-            menucontroller.end_tournament(tournament)
+            menu.end_tournament(tournament)

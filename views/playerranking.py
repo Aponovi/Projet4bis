@@ -33,5 +33,5 @@ class Player_RankingView:
               + ")")
         self.ranking = -1
         while self.ranking < 0:
-            self.ranking = verification\
+            self.ranking = verification \
                 .field_int("Veuillez saisir le nouveau classement: ")

@@ -1,12 +1,12 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from controllers import menucontroller
+from controllers import menu
 
 
 def main():
 
-    menucontroller.start_program()
+    menu.start_program()
 
 
 if __name__ == "__main__":
