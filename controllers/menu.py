@@ -1,9 +1,11 @@
 import sys
 
 from models import player as player_m, round as round_m, tournament as tour_m
-from views import menu
+from views import menu, \
+    tournament as tour_v
 from controllers import player as player_c,\
     round as round_c, \
+    tournament as tour_c, \
     reports
 
 
@@ -17,6 +19,8 @@ def start_program():
         round_instances = []
         i = 1
         last_match_completed = False
+        if len(tour.turn) == 0:
+            last_match_completed = True
         for turn in tour.turn:
             turn.load_match_by_turn()
             turn.matches = []
@@ -33,7 +37,7 @@ def start_program():
     choice = menu.main_menu()
 
     if choice == 1:
-        controller_tournament = tour.TournamentController()
+        controller_tournament = tour_c.TournamentController()
         controller_tournament.tournament_creation()
 
     elif choice == 2:
@@ -67,7 +71,7 @@ def start_program():
         bye_bye()
 
     elif choice == 4:
-        controller_tournament = tour.TournamentController()
+        controller_tournament = tour_c.TournamentController()
         controller_tournament.tournament_creation_test()
 
 
@@ -92,7 +96,7 @@ def menu_tournament(tour, round_in_progress=False):
 
 def end_tournament(tour):
     players = tour.tournament_results()
-    tour.fin_tournoi_affichage(players)
+    tour_v.fin_tournoi_affichage(players)
 
 
 def bye_bye():

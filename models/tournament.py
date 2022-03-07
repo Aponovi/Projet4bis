@@ -105,13 +105,13 @@ class TournamentModel:
                 first_player = first_element[0]
                 second_player = second_element[0]
                 if first_player in players_scores:
-                    players_scores[first_player] += first_element[1]
+                    players_scores[first_player] += float(first_element[1])
                 else:
-                    players_scores[first_player] = first_element[1]
+                    players_scores[first_player] = float(first_element[1])
                 if second_player in players_scores:
-                    players_scores[second_player] += second_element[1]
+                    players_scores[second_player] += float(second_element[1])
                 else:
-                    players_scores[second_player] = second_element[1]
+                    players_scores[second_player] = float(second_element[1])
         """Tri les joueurs selon leur score et leur classement"""
         players_scores_trie = []
         while len(players_scores) > 0:

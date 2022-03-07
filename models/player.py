@@ -75,7 +75,7 @@ class Player:
                       first_name=serialized_player["first_name"],
                       birth_date=serialized_player["birth_date"],
                       gender=serialized_player["gender"],
-                      ranking=serialized_player["ranking"],
+                      ranking=int(serialized_player["ranking"]),
                       id_tournament=serialized_player["id_tournament"],
                       id_player=serialized_player["id_player"])
 

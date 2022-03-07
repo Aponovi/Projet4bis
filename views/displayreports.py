@@ -36,12 +36,12 @@ class DisplayReportsView:
     def matches_list(matches):
         print("\nListe des matches : \n")
         for match in matches:
-            if match.results_player_1 == 1:
+            if float(match.results_player_1) == 1:
                 results_match = f"Victoire {match.player_1.name}"
-            elif match.results_player_2 == 1:
+            elif float(match.results_player_2) == 1:
                 results_match = f"Victoire {match.player_2.name}"
-            elif match.results_player_1 == 0.5 \
-                    and match.results_player_2 == 0.5:
+            elif float(match.results_player_1) == 0.5 \
+                    and float(match.results_player_2) == 0.5:
                 results_match = "Match nul"
             else:
                 results_match = "Match non joué"

@@ -94,9 +94,9 @@ class Round:
                 premier_joueur = first_element[0]
                 deuxieme_joueur = second_element[0]
                 if premier_joueur in players_scores:
-                    players_scores[premier_joueur] += first_element[1]
+                    players_scores[premier_joueur] += float(first_element[1])
                 else:
-                    players_scores[premier_joueur] = first_element[1]
+                    players_scores[premier_joueur] = float(first_element[1])
                 if deuxieme_joueur in players_scores:
                     players_scores[deuxieme_joueur] += second_element[1]
                 else:
@@ -108,13 +108,13 @@ class Round:
             joueur_max_score = None
             for joueur in players_scores:
                 if joueur_max_score is None:
-                    max_score = players_scores[joueur]
+                    max_score = float(players_scores[joueur])
                     joueur_max_score = joueur
                 else:
-                    if players_scores[joueur] > max_score:
-                        max_score = players_scores[joueur]
+                    if float(players_scores[joueur]) > max_score:
+                        max_score = float(players_scores[joueur])
                         joueur_max_score = joueur
-                    elif players_scores[joueur] == max_score:
+                    elif float(players_scores[joueur]) == max_score:
                         if joueur.ranking > joueur_max_score.ranking:
                             joueur_max_score = joueur
             players.append(joueur_max_score)

@@ -43,10 +43,10 @@ class Match:
             id_match=serialized_match["id_match"],
             player_1=player.Player.load_player(
                 uuid.UUID(serialized_match["id_player_1"])),
-            results_player_1=serialized_match["results_player_1"],
+            results_player_1=float(serialized_match["results_player_1"]),
             player_2=player.Player.load_player(
                 uuid.UUID(serialized_match["id_player_2"])),
-            results_player_2=serialized_match["results_player_2"],
+            results_player_2=float(serialized_match["results_player_2"]),
         )
 
     def maj_results(self):
