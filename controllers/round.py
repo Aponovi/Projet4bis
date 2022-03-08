@@ -11,7 +11,7 @@ class RoundController:
         self.view = round_v.RoundView()
 
     def round_creation(self, tournament):
-        # génerer une nouvelle ronde du tournoi
+        # générer une nouvelle ronde du tournoi
         new_tour = round_m.Round(len(tournament.round_instances),
                                  tournament.id_tournament)
         new_tour.generate_pair(tournament.players, tournament.round_instances)
@@ -27,18 +27,18 @@ class RoundController:
         for i in range(len(tour)):
             choix = self.view.matches_done(tour, i)
             match_instance = tour[i]
-            joueur_1 = match_instance[0]
-            joueur_2 = match_instance[1]
+            player_1 = match_instance[0]
+            player_2 = match_instance[1]
             if choix == 1:
-                joueur_1[1] += 1
+                player_1[1] += 1
             elif choix == 2:
-                joueur_2[1] += 1
+                player_2[1] += 1
             elif choix == 3:
-                joueur_1[1] += 0.5
-                joueur_2[1] += 0.5
+                player_1[1] += 0.5
+                player_2[1] += 0.5
             match = ronde.matches_model[i]
-            match.results_player_1 = joueur_1[1]
-            match.results_player_2 = joueur_2[1]
+            match.results_player_1 = player_1[1]
+            match.results_player_2 = player_2[1]
             match.maj_results()
         ronde.end_date = datetime.datetime.now()
         ronde.maj_end_date()

@@ -91,34 +91,34 @@ class Round:
             for game in tour:
                 first_element = game[0]
                 second_element = game[1]
-                premier_joueur = first_element[0]
-                deuxieme_joueur = second_element[0]
-                if premier_joueur in players_scores:
-                    players_scores[premier_joueur] += float(first_element[1])
+                first_player = first_element[0]
+                second_player = second_element[0]
+                if first_player in players_scores:
+                    players_scores[first_player] += float(first_element[1])
                 else:
-                    players_scores[premier_joueur] = float(first_element[1])
-                if deuxieme_joueur in players_scores:
-                    players_scores[deuxieme_joueur] += second_element[1]
+                    players_scores[first_player] = float(first_element[1])
+                if second_player in players_scores:
+                    players_scores[second_player] += second_element[1]
                 else:
-                    players_scores[deuxieme_joueur] = second_element[1]
+                    players_scores[second_player] = second_element[1]
         """Tri les joueurs selon leur score et leur classement"""
         players = []
         while len(players_scores) > 0:
             max_score = 0
-            joueur_max_score = None
-            for joueur in players_scores:
-                if joueur_max_score is None:
-                    max_score = float(players_scores[joueur])
-                    joueur_max_score = joueur
+            player_max_score = None
+            for player in players_scores:
+                if player_max_score is None:
+                    max_score = float(players_scores[player])
+                    player_max_score = player
                 else:
-                    if float(players_scores[joueur]) > max_score:
-                        max_score = float(players_scores[joueur])
-                        joueur_max_score = joueur
-                    elif float(players_scores[joueur]) == max_score:
-                        if joueur.ranking > joueur_max_score.ranking:
-                            joueur_max_score = joueur
-            players.append(joueur_max_score)
-            del players_scores[joueur_max_score]
+                    if float(players_scores[player]) > max_score:
+                        max_score = float(players_scores[player])
+                        player_max_score = player
+                    elif float(players_scores[player]) == max_score:
+                        if player.ranking > player_max_score.ranking:
+                            player_max_score = player
+            players.append(player_max_score)
+            del players_scores[player_max_score]
         return players
 
     def pair_player(self, players, round_instance, round_row):

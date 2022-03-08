@@ -6,7 +6,8 @@ class RoundView:
         self.end_date = None
         self.matches = None
 
-    def display_matches(self, new_tour):
+    @staticmethod
+    def display_matches(new_tour):
         print(f"\n{new_tour.name} : Les matches sont les suivants : \n")
         for i in range(len(new_tour.matches)):
             match = new_tour.matches[i]
@@ -21,7 +22,8 @@ class RoundView:
 
             print(to_print)
 
-    def matches_done(self, tour, num_match):
+    @staticmethod
+    def matches_done(tour, num_match):
         match = tour[num_match]
         player_1 = match[0]
         player_2 = match[1]

@@ -1,4 +1,4 @@
-from views import verification
+from views import check
 
 
 class Player_RankingView:
@@ -33,5 +33,5 @@ class Player_RankingView:
               + ")")
         self.ranking = -1
         while self.ranking < 0:
-            self.ranking = verification \
+            self.ranking = check \
                 .field_int("Veuillez saisir le nouveau classement: ")

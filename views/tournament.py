@@ -1,5 +1,5 @@
 from controllers import menu
-from views import verification
+from views import check
 
 
 class TournamentView:
@@ -16,18 +16,18 @@ class TournamentView:
 
     def new_tournament(self):
         print("\nCréation d'un tournoi:\n")
-        self.name = verification\
+        self.name = check\
             .field_string("Veuillez saisir le nom du tournoi: ", isalnum=True)
-        self.place = verification\
+        self.place = check\
             .field_string("Veuillez saisir le lieu du tournoi: ", isalnum=True)
         date_error = True
         self.start_date = None
         self.end_date = None
         while date_error:
-            self.start_date = verification\
+            self.start_date = check\
                 .field_date("Veuillez saisir la date de début du tournoi ("
                             "jj/mm/aaaa): ")
-            self.end_date = verification\
+            self.end_date = check\
                 .field_date("Veuillez saisir la date de fin du tournoi ("
                             "jj/mm/aaaa): ")
             if self.start_date <= self.end_date:
@@ -36,11 +36,11 @@ class TournamentView:
                 print('La date de début du tournoi doit être antérieure à la '
                       'date de fin.')
         self.time_control = time_choice()
-        self.nb_players = verification\
+        self.nb_players = check\
             .field_int("Veuillez saisir le nombre de joueurs: ")
-        self.nb_rounds = verification\
+        self.nb_rounds = check\
             .field_int("Veuillez saisir le nombre de tours: ")
-        self.description = verification\
+        self.description = check\
             .field_string("Description du tournoi: ", max_len=1000)
         return (self.name,
                 self.place,
@@ -81,16 +81,16 @@ def time_choice():
 
 def tournament_players(in_tournament):
     print("\nCréation d'un joueur:\n")
-    name = verification\
+    name = check\
         .field_string("Veuillez saisir le nom du joueur: ", isalpha=True)
-    first_name = verification\
+    first_name = check\
         .field_string("Veuillez saisir le prénom du joueur: ", isalpha=True)
-    birth_date = verification\
+    birth_date = check\
         .field_date("Veuillez saisir la date de naissance du joueur ("
                     "jj/mm/aaaa): ")
-    gender = verification\
+    gender = check\
         .check_gender("Veuillez saisir le genre du joueur (f/m): ")
-    ranking = verification\
+    ranking = check\
         .field_int("Veuillez saisir le classement du joueur: ")
     return in_tournament, name, first_name, birth_date, gender, ranking
 
